@@ -1,0 +1,60 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int n, head, i, count = 0;
+    int req[100], visited[100] = {0};
+    int total = 0;
+
+    printf("Enter number of requests: ");
+    scanf("%d", &n);
+
+    printf("Enter request queue: ");
+    for (i = 0; i < n; i++) scanf("%d", &req[i]);
+
+    printf("Enter initial head position: ");
+    scanf("%d", &head);
+
+    printf("\nSSTF Order: %d ", head);
+
+    while (count < n) {
+        int min = 9999, index = -1;
+
+        for (i = 0; i < n; i++) {
+            if (!visited[i]) {
+                int diff = abs(req[i] - head);
+                if (diff < min) {
+                    min = diff;
+                    index = i;
+                }
+            }
+        }
+
+        visited[index] = 1;
+        total += abs(req[index] - head);
+        head = req[index];
+
+        printf("-> %d ", head);
+        count++;
+    }
+
+    printf("\nTotal Head Movement = %d\n", total);
+    return 0;
+}
+
+
+Disk Scheduling - SSTF (Shortest Seek Time First)
+
+Read number of disk requests from the user
+Read all request positions
+Read initial head position
+Mark all requests as unvisited
+Start from initial head position
+While there are unvisited requests, find the unvisited request closest to current head position
+Calculate distance for all unvisited requests and select the one with minimum distance
+Mark that request as visited
+Add the distance to total head movement
+Move head to that request position
+Continue until all requests are visited
+Display the order of disk head movement
+Display total head movement

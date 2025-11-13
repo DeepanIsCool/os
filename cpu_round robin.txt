@@ -1,0 +1,82 @@
+#include <stdio.h>
+
+int main() {
+    int n, i, tq;
+    int bt[20], at[20], rem[20], wt[20], tat[20], ct[20], p[20];
+    int t = 0, completed = 0;
+    float avg_wt = 0, avg_tat = 0;
+
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
+
+    for (i = 0; i < n; i++) {
+        printf("Arrival time of P%d: ", i + 1);
+        scanf("%d", &at[i]);
+        printf("Burst time of P%d: ", i + 1);
+        scanf("%d", &bt[i]);
+        rem[i] = bt[i];
+        p[i] = i + 1;
+    }
+
+    printf("Enter time quantum: ");
+    scanf("%d", &tq);
+
+    while (completed < n) {
+        int done = 1;
+
+        for (i = 0; i < n; i++) {
+            if (at[i] <= t && rem[i] > 0) {
+                done = 0;
+
+                if (rem[i] > tq) {
+                    t += tq;
+                    rem[i] -= tq;
+                } else {
+                    t += rem[i];
+                    ct[i] = t;
+                    rem[i] = 0;
+                    completed++;
+                }
+            }
+        }
+
+        if (done) t++;
+    }
+
+    for (i = 0; i < n; i++) {
+        tat[i] = ct[i] - at[i];
+        wt[i] = tat[i] - bt[i];
+        avg_wt += wt[i];
+        avg_tat += tat[i];
+    }
+
+    printf("\nProcess\tAT\tBT\tWT\tTAT\tCT\n");
+    for (i = 0; i < n; i++) {
+        printf("P%d\t%d\t%d\t%d\t%d\t%d\n",
+               p[i], at[i], bt[i], wt[i], tat[i], ct[i]);
+    }
+
+    printf("\nAverage Waiting Time: %.2f", avg_wt / n);
+    printf("Average Turnaround Time: %.2f\n", avg_tat / n);
+
+    return 0;
+}
+
+CPU Scheduling - Round Robin
+
+Read number of processes from the user
+For each process, read arrival time and burst time
+Store remaining time for each process equal to burst time initially
+Read time quantum from the user
+Set current time to zero
+While there are incomplete processes, iterate through all processes
+For each process that has arrived and has remaining time greater than zero, check if remaining time exceeds time quantum
+If yes, execute for time quantum, reduce remaining time, and increment current time
+If no, execute for remaining time, set completion time, mark remaining time as zero, and increment completed count
+If no process is ready to execute, increment time
+Calculate turnaround time as completion time minus arrival time
+Calculate waiting time as turnaround time minus burst time
+Display process details with arrival time, burst time, waiting time, turnaround time, and completion time
+Calculate and display average waiting time and average turnaround time
+
+

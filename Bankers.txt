@@ -1,0 +1,102 @@
+#include <stdio.h>
+
+int main() {
+    int P, R;
+    printf("Enter number of processes: ");
+    scanf("%d", &P);
+
+    printf("Enter number of resources: ");
+    scanf("%d", &R);
+
+    int allocation[10][10], max[10][10], need[10][10], available[10];
+    int finished[10], safeSeq[10];
+
+    int i, j;
+
+    printf("Enter Allocation matrix:\n");
+    for (i = 0; i < P; i++) {
+        for (j = 0; j < R; j++) {
+            scanf("%d", &allocation[i][j]);
+        }
+    }
+
+    printf("Enter Max matrix:\n");
+    for (i = 0; i < P; i++) {
+        for (j = 0; j < R; j++) {
+            scanf("%d", &max[i][j]);
+        }
+    }
+
+    printf("Enter Available resources:\n");
+    for (i = 0; i < R; i++) {
+        scanf("%d", &available[i]);
+    }
+
+    // Calculate Need = Max - Allocation
+    for (i = 0; i < P; i++) {
+        for (j = 0; j < R; j++) {
+            need[i][j] = max[i][j] - allocation[i][j];
+        }
+        finished[i] = 0;
+    }
+
+    int count = 0;
+
+    while (count < P) {
+        int found = 0;
+
+        for (i = 0; i < P; i++) {
+            if (finished[i] == 0) {
+                int canAllocate = 1;
+
+                for (j = 0; j < R; j++) {
+                    if (need[i][j] > available[j]) {
+                        canAllocate = 0;
+                        break;
+                    }
+                }
+
+                if (canAllocate == 1) {
+                    for (j = 0; j < R; j++) {
+                        available[j] += allocation[i][j];
+                    }
+
+                    safeSeq[count] = i;
+                    finished[i] = 1;
+                    count++;
+                    found = 1;
+                }
+            }
+        }
+
+        if (found == 0) {
+            printf("System is NOT in a safe state.\n");
+            return 0;
+        }
+    }
+
+    printf("System is in a SAFE state.\nSafe Sequence: ");
+    for (i = 0; i < P; i++) {
+        printf("P%d ", safeSeq[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
+
+
+Banker's Algorithm (Deadlock Avoidance)
+
+Read the number of processes and resources from the user
+Read the Allocation matrix showing resources currently allocated to each process
+Read the Max matrix showing maximum resources each process may need
+Read the Available resources vector showing currently available resources
+Calculate the Need matrix by subtracting Allocation from Max for each process
+Initialize all processes as unfinished
+Start a loop that continues until all processes are checked
+In each iteration, search for a process that is unfinished and whose needs can be satisfied with available resources
+If such a process is found, simulate its completion by adding its allocated resources back to available resources
+Mark that process as finished and add it to the safe sequence
+If no such process can be found in an iteration, the system is in an unsafe state
+If all processes complete successfully, display the safe sequence
+

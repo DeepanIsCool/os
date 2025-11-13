@@ -1,0 +1,513 @@
+# Linux Shell Commands, C Programs and Algorithms
+
+## 1. Even or Odd
+
+### Shell Script
+```bash
+#!/bin/bash
+echo "Enter a number:"
+read num
+if [ $((num % 2)) -eq 0 ]; then
+    echo "$num is Even"
+else
+    echo "$num is Odd"
+fi
+```
+
+### C Code
+```c
+#include <stdio.h>
+
+int main() {
+    int num;
+    printf("Enter a number: ");
+    scanf("%d", &num);
+    
+    if (num % 2 == 0)
+        printf("%d is Even\n", num);
+    else
+        printf("%d is Odd\n", num);
+    
+    return 0;
+}
+```
+
+### Algorithm
+- Read a number from the user
+- Divide the number by 2 and find the remainder
+- If remainder is zero, the number is even
+- Otherwise, the number is odd
+- Display the result
+
+---
+
+## 2. Leap Year
+
+### Shell Script
+```bash
+#!/bin/bash
+echo "Enter a year:"
+read year
+if [ $((year % 400)) -eq 0 ]; then
+    echo "$year is a Leap Year"
+elif [ $((year % 100)) -eq 0 ]; then
+    echo "$year is not a Leap Year"
+elif [ $((year % 4)) -eq 0 ]; then
+    echo "$year is a Leap Year"
+else
+    echo "$year is not a Leap Year"
+fi
+```
+
+### C Code
+```c
+#include <stdio.h>
+
+int main() {
+    int year;
+    printf("Enter a year: ");
+    scanf("%d", &year);
+    
+    if (year % 400 == 0)
+        printf("%d is a Leap Year\n", year);
+    else if (year % 100 == 0)
+        printf("%d is not a Leap Year\n", year);
+    else if (year % 4 == 0)
+        printf("%d is a Leap Year\n", year);
+    else
+        printf("%d is not a Leap Year\n", year);
+    
+    return 0;
+}
+```
+
+### Algorithm
+- Read a year from the user
+- Check if year is divisible by 400, if yes then it is a leap year
+- Else check if year is divisible by 100, if yes then it is not a leap year
+- Else check if year is divisible by 4, if yes then it is a leap year
+- Otherwise it is not a leap year
+- Display the result
+
+---
+
+## 3. Factorial
+
+### Shell Script
+```bash
+#!/bin/bash
+echo "Enter a number:"
+read num
+fact=1
+i=1
+while [ $i -le $num ]; do
+    fact=$((fact * i))
+    i=$((i + 1))
+done
+echo "Factorial of $num is $fact"
+```
+
+### C Code
+```c
+#include <stdio.h>
+
+int main() {
+    int num, i;
+    long long fact = 1;
+    
+    printf("Enter a number: ");
+    scanf("%d", &num);
+    
+    for (i = 1; i <= num; i++) {
+        fact *= i;
+    }
+    
+    printf("Factorial of %d is %lld\n", num, fact);
+    return 0;
+}
+```
+
+### Algorithm
+- Read a number from the user
+- Initialize factorial variable to 1
+- Initialize counter variable to 1
+- Run a loop from 1 to the number
+- In each iteration, multiply factorial by counter value
+- Increment counter
+- After loop ends, display the factorial value
+
+---
+
+## 4. Swap Two Integers
+
+### Shell Script
+```bash
+#!/bin/bash
+echo "Enter first number:"
+read a
+echo "Enter second number:"
+read b
+echo "Before swap: a=$a, b=$b"
+temp=$a
+a=$b
+b=$temp
+echo "After swap: a=$a, b=$b"
+```
+
+### C Code
+```c
+#include <stdio.h>
+
+int main() {
+    int a, b, temp;
+    
+    printf("Enter first number: ");
+    scanf("%d", &a);
+    printf("Enter second number: ");
+    scanf("%d", &b);
+    
+    printf("Before swap: a=%d, b=%d\n", a, b);
+    
+    temp = a;
+    a = b;
+    b = temp;
+    
+    printf("After swap: a=%d, b=%d\n", a, b);
+    return 0;
+}
+```
+
+### Algorithm
+- Read two numbers from the user into variables a and b
+- Display values before swapping
+- Store value of a in a temporary variable
+- Assign value of b to a
+- Assign value of temporary variable to b
+- Display values after swapping
+
+---
+
+## 5. Basic Arithmetic Operations
+
+### Shell Script
+```bash
+#!/bin/bash
+echo "Enter first number:"
+read a
+echo "Enter second number:"
+read b
+echo "Addition: $((a + b))"
+echo "Subtraction: $((a - b))"
+echo "Multiplication: $((a * b))"
+if [ $b -ne 0 ]; then
+    echo "Division: $((a / b))"
+else
+    echo "Division: Cannot divide by zero"
+fi
+```
+
+### C Code
+```c
+#include <stdio.h>
+
+int main() {
+    float a, b;
+    
+    printf("Enter first number: ");
+    scanf("%f", &a);
+    printf("Enter second number: ");
+    scanf("%f", &b);
+    
+    printf("Addition: %.2f\n", a + b);
+    printf("Subtraction: %.2f\n", a - b);
+    printf("Multiplication: %.2f\n", a * b);
+    
+    if (b != 0)
+        printf("Division: %.2f\n", a / b);
+    else
+        printf("Division: Cannot divide by zero\n");
+    
+    return 0;
+}
+```
+
+### Algorithm
+- Read two numbers from the user
+- Perform addition by adding the two numbers and display result
+- Perform subtraction by subtracting second from first and display result
+- Perform multiplication by multiplying the two numbers and display result
+- Check if second number is not zero
+- If not zero, perform division by dividing first by second and display result
+- If zero, display error message for division by zero
+
+---
+
+## 6. Multiplication Table
+
+### Shell Script
+```bash
+#!/bin/bash
+echo "Enter a number:"
+read num
+echo "Multiplication table of $num:"
+for i in {1..10}; do
+    echo "$num x $i = $((num * i))"
+done
+```
+
+### C Code
+```c
+#include <stdio.h>
+
+int main() {
+    int num, i;
+    
+    printf("Enter a number: ");
+    scanf("%d", &num);
+    
+    printf("Multiplication table of %d:\n", num);
+    for (i = 1; i <= 10; i++) {
+        printf("%d x %d = %d\n", num, i, num * i);
+    }
+    
+    return 0;
+}
+```
+
+### Algorithm
+- Read a number from the user
+- Initialize counter variable to 1
+- Run a loop from 1 to 10
+- In each iteration, multiply the number by counter value
+- Display the multiplication expression and result
+- Increment counter
+- Continue until counter reaches 10
+
+---
+
+## 7. File Existence Check
+
+### Shell Script
+```bash
+#!/bin/bash
+echo "Enter filename:"
+read filename
+if [ -e "$filename" ]; then
+    echo "File '$filename' exists"
+    if [ -f "$filename" ]; then
+        echo "It is a regular file"
+    elif [ -d "$filename" ]; then
+        echo "It is a directory"
+    fi
+else
+    echo "File '$filename' does not exist"
+fi
+```
+
+### C Code
+```c
+#include <stdio.h>
+
+int main() {
+    char filename[100];
+    FILE *file;
+    
+    printf("Enter filename: ");
+    scanf("%s", filename);
+    
+    file = fopen(filename, "r");
+    
+    if (file != NULL) {
+        printf("File '%s' exists\n", filename);
+        fclose(file);
+    } else {
+        printf("File '%s' does not exist\n", filename);
+    }
+    
+    return 0;
+}
+```
+
+### Algorithm
+- Read filename from the user
+- Attempt to open the file in read mode
+- If file pointer is not null, file exists
+- Display message that file exists
+- Close the file
+- If file pointer is null, file does not exist
+- Display message that file does not exist
+
+---
+
+## 8. Palindrome Check
+
+### Shell Script
+```bash
+#!/bin/bash
+echo "Enter a number or string:"
+read input
+reversed=$(echo "$input" | rev)
+if [ "$input" = "$reversed" ]; then
+    echo "'$input' is a Palindrome"
+else
+    echo "'$input' is not a Palindrome"
+fi
+```
+
+### C Code
+```c
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    char str[100], rev[100];
+    int i, j, len;
+    
+    printf("Enter a string: ");
+    scanf("%s", str);
+    
+    len = strlen(str);
+    
+    for (i = len - 1, j = 0; i >= 0; i--, j++) {
+        rev[j] = str[i];
+    }
+    rev[j] = '\0';
+    
+    if (strcmp(str, rev) == 0)
+        printf("'%s' is a Palindrome\n", str);
+    else
+        printf("'%s' is not a Palindrome\n", str);
+    
+    return 0;
+}
+```
+
+### Algorithm
+- Read a string or number from the user
+- Find the length of the input
+- Create a new string to store reversed version
+- Start from last character of original string
+- Copy each character to the beginning of reversed string
+- Continue until all characters are copied
+- Compare original string with reversed string
+- If both are equal, input is a palindrome
+- Otherwise, input is not a palindrome
+- Display the result
+
+---
+
+## 9. Sum of Digits
+
+### Shell Script
+```bash
+#!/bin/bash
+echo "Enter a number:"
+read num
+sum=0
+temp=$num
+while [ $temp -gt 0 ]; do
+    digit=$((temp % 10))
+    sum=$((sum + digit))
+    temp=$((temp / 10))
+done
+echo "Sum of digits of $num is $sum"
+```
+
+### C Code
+```c
+#include <stdio.h>
+
+int main() {
+    int num, sum = 0, digit, temp;
+    
+    printf("Enter a number: ");
+    scanf("%d", &num);
+    
+    temp = num;
+    
+    while (temp > 0) {
+        digit = temp % 10;
+        sum += digit;
+        temp /= 10;
+    }
+    
+    printf("Sum of digits of %d is %d\n", num, sum);
+    return 0;
+}
+```
+
+### Algorithm
+- Read a number from the user
+- Initialize sum variable to zero
+- Store the number in a temporary variable
+- While temporary variable is greater than zero, extract last digit using modulo 10 operation
+- Add the digit to sum
+- Remove last digit by dividing temporary variable by 10
+- Continue loop until all digits are processed
+- Display the sum of digits
+
+---
+
+## 10. Count Words in a File
+
+### Shell Script
+```bash
+#!/bin/bash
+echo "Enter filename:"
+read filename
+if [ -f "$filename" ]; then
+    words=$(wc -w < "$filename")
+    echo "Number of words in '$filename': $words"
+else
+    echo "File '$filename' does not exist"
+fi
+```
+
+### C Code
+```c
+#include <stdio.h>
+#include <ctype.h>
+
+int main() {
+    char filename[100];
+    FILE *file;
+    char ch;
+    int words = 0, inWord = 0;
+    
+    printf("Enter filename: ");
+    scanf("%s", filename);
+    
+    file = fopen(filename, "r");
+    
+    if (file == NULL) {
+        printf("File '%s' does not exist\n", filename);
+        return 1;
+    }
+    
+    while ((ch = fgetc(file)) != EOF) {
+        if (isspace(ch)) {
+            inWord = 0;
+        } else if (inWord == 0) {
+            inWord = 1;
+            words++;
+        }
+    }
+    
+    fclose(file);
+    printf("Number of words in '%s': %d\n", filename, words);
+    return 0;
+}
+```
+
+### Algorithm
+- Read filename from the user
+- Attempt to open the file in read mode
+- If file does not exist, display error message and exit
+- Initialize word counter to zero
+- Initialize flag variable to track if currently inside a word
+- Read characters from file one by one until end of file
+- If character is a space, tab, or newline, set flag to not in word
+- If character is not a space and flag indicates not in word, increment word counter and set flag to in word
+- Continue until end of file is reached
+- Close the file
+- Display the total word count

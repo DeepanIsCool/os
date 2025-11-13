@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void sort(int arr[], int n) {
+    int i, j, temp;
+    for (i = 0; i < n - 1; i++) {
+        for (j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}
+
+
+int main() {
+    int n, head, disk, i;
+    int req[100], left[100], right[100];
+    int l = 0, r = 0, total = 0;
+
+    printf("Enter number of requests: ");
+    scanf("%d", &n);
+
+    printf("Enter request queue: ");
+    for (i = 0; i < n; i++) scanf("%d", &req[i]);
+
+    printf("Enter initial head position: ");
+    scanf("%d", &head);
+
+    printf("Enter disk size: ");
+    scanf("%d", &disk);
+
+    right[r++] = disk;
+    for (i = 0; i < n; i++) {
+        if (req[i] >= head) right[r++] = req[i];
+        else left[l++] = req[i];
+    }
+
+    sort(left, l);
+    sort(right, r);
+
+    printf("\nSCAN Order: %d ", head);
+
+    for (i = 0; i < r; i++) {
+        total += abs(right[i] - head);
+        head = right[i];
+        printf("-> %d ", head);
+    }
+
+    for (i = l - 1; i >= 0; i--) {
+        total += abs(left[i] - head);
+        head = left[i];
+        printf("-> %d ", head);
+    }
+
+    printf("\nTotal Head Movement = %d\n", total);
+    return 0;
+}
+
+
+Disk Scheduling - SCAN
+
+Read number of disk requests from the user
+Read all request positions
+Read initial head position and disk size
+Add disk end position to right array
+Separate requests into left array for positions less than head and right array for positions greater than or equal to head
+Sort both arrays in ascending order
+Start from initial head position
+Service all requests in right array in ascending order including disk end, calculating total head movement
+After reaching disk end, reverse direction
+Service all requests in left array in descending order, calculating total head movement
+Display the order of disk head movement
+Display total head movement

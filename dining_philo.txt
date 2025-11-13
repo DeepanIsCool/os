@@ -1,0 +1,78 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <semaphore.h>
+#include <unistd.h>
+
+#define N 5  /* number of philosophers */
+
+sem_t chopstick[N];
+
+void *philosopher(void *arg) {
+    int id = *(int *)arg;
+    for (;;) {
+        printf("Philosopher %d is thinking...\n", id);
+        sleep(1);
+
+        /* pick up left chopstick */
+        sem_wait(&chopstick[id]);
+
+        /* pick up right chopstick */
+        sem_wait(&chopstick[(id + 1) % N]);
+
+        printf("Philosopher %d is eating...\n", id);
+        sleep(2);
+
+        /* put down left chopstick */
+        sem_post(&chopstick[id]);
+
+        /* put down right chopstick */
+        sem_post(&chopstick[(id + 1) % N]);
+
+        printf("Philosopher %d finished eating and put down chopsticks.\n", id);
+    }
+    return NULL;
+}
+
+int main(void) {
+    pthread_t threads[N];
+    int ids[N];
+
+    for (int i = 0; i < N; i++) {
+        if (sem_init(&chopstick[i], 0, 1) != 0) {
+            perror("sem_init");
+            return EXIT_FAILURE;
+        }
+    }
+
+    for (int i = 0; i < N; i++) {
+        ids[i] = i;
+        if (pthread_create(&threads[i], NULL, philosopher, &ids[i]) != 0) {
+            perror("pthread_create");
+            return EXIT_FAILURE;
+        }
+    }
+
+    for (int i = 0; i < N; i++) {
+        pthread_join(threads[i], NULL);
+    }
+
+    for (int i = 0; i < N; i++) sem_destroy(&chopstick[i]);
+
+    return 0;
+}
+
+Dining Philosophers Problem
+
+Initialize a semaphore for each chopstick with value one
+Create a philosopher thread for each philosopher
+Each philosopher thread runs an infinite loop with thinking and eating phases
+In thinking phase, display that philosopher is thinking and wait for some time
+To eat, philosopher picks up left chopstick by waiting on its semaphore
+Then picks up right chopstick by waiting on the next semaphore
+Display that philosopher is eating and wait for some time
+After eating, put down left chopstick by signaling its semaphore
+Put down right chopstick by signaling the next semaphore
+Display that philosopher finished eating
+Return to thinking phase
+Main thread waits for all philosopher threads to complete

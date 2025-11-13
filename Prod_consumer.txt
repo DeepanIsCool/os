@@ -1,0 +1,109 @@
+#include <stdio.h>
+#include <pthread.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <time.h>
+
+#define BUFFER_SIZE 5
+
+int buffer[BUFFER_SIZE];
+int in = 0, out = 0, count = 0;
+
+pthread_mutex_t mutex;
+pthread_cond_t not_full;
+pthread_cond_t not_empty;
+
+void* producer(void* arg) {
+    (void)arg;
+    while (1) {
+        int item = rand() % 100; // produce an item
+
+        pthread_mutex_lock(&mutex);
+
+        while (count == BUFFER_SIZE) // buffer full
+            pthread_cond_wait(&not_full, &mutex);
+
+        buffer[in] = item;
+        printf("Produced: %d at index %d\n", item, in);
+        in = (in + 1) % BUFFER_SIZE;
+        count++;
+
+        pthread_cond_signal(&not_empty); // signal buffer has item
+        pthread_mutex_unlock(&mutex);
+
+        sleep(1); // simulate production time
+    }
+    return NULL;
+}
+
+void* consumer(void* arg) {
+    (void)arg;
+    while (1) {
+        pthread_mutex_lock(&mutex);
+
+        while (count == 0) // buffer empty
+            pthread_cond_wait(&not_empty, &mutex);
+
+        int item = buffer[out];
+        printf("Consumed: %d from index %d\n", item, out);
+        out = (out + 1) % BUFFER_SIZE;
+        count--;
+
+        pthread_cond_signal(&not_full); // signal buffer has space
+        pthread_mutex_unlock(&mutex);
+
+        sleep(1); // simulate consumption time
+    }
+    return NULL;
+}
+
+int main() {
+    pthread_t prod, cons;
+
+    srand((unsigned)time(NULL));
+
+    pthread_mutex_init(&mutex, NULL);
+    pthread_cond_init(&not_full, NULL);
+    pthread_cond_init(&not_empty, NULL);
+
+    if (pthread_create(&prod, NULL, producer, NULL) != 0) {
+        perror("Failed to create producer thread");
+        return 1;
+    }
+    if (pthread_create(&cons, NULL, consumer, NULL) != 0) {
+        perror("Failed to create consumer thread");
+        return 1;
+    }
+
+    pthread_join(prod, NULL);
+    pthread_join(cons, NULL);
+
+    pthread_mutex_destroy(&mutex);
+    pthread_cond_destroy(&not_full);
+    pthread_cond_destroy(&not_empty);
+
+    return 0;
+}
+
+
+Producer-Consumer Problem
+
+Initialize a buffer of fixed size with head and tail pointers and count variable
+Initialize a mutex lock for synchronization
+Initialize condition variables for buffer not full and buffer not empty
+Create producer thread that runs indefinitely
+Producer generates a random item
+Lock the mutex
+If buffer is full, wait on not full condition variable
+Add item to buffer at head position
+Increment head pointer circularly and increment count
+Signal not empty condition variable
+Unlock mutex and sleep briefly
+Create consumer thread that runs indefinitely
+Consumer locks the mutex
+If buffer is empty, wait on not empty condition variable
+Remove item from buffer at tail position
+Increment tail pointer circularly and decrement count
+Signal not full condition variable
+Unlock mutex and sleep briefly
+Main thread waits for producer and consumer threads to complete
